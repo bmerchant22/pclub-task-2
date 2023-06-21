@@ -186,19 +186,30 @@ func (srv *Server) handleGetUserDetails(c *gin.Context) {
 		zap.S().Errorf("Error while calculating most used language : %v", err)
 	}
 
+	repo, err := store.GetMostPopularRepo(ctx, client, username)
+	if err != nil {
+		zap.S().Errorf("Error while getting the most popular repo : %v", err)
+	}
+
+	mostPopularRepo := models.RepoLink{
+		RepoName: repo.GetName(),
+		Link:     fmt.Sprintf("http://localhost:8080/user-repos/%s", repo.GetName()),
+	}
+
 	userDetails := models.AuthorizedUserDetails{
-		Username:       user.GetLogin(),
-		AvatarURL:      user.GetAvatarURL(),
-		Name:           user.GetName(),
-		Email:          user.GetEmail(),
-		Bio:            user.GetBio(),
-		Location:       user.GetLocation(),
-		Followers:      followerLinks,
-		Following:      followingLinks,
-		PublicRepos:    user.GetPublicRepos(),
-		Organizations:  orgNames,
-		RecentActivity: eventDetails,
-		MostUsedLang:   mostUsedLanguage,
+		Username:        user.GetLogin(),
+		AvatarURL:       user.GetAvatarURL(),
+		Name:            user.GetName(),
+		Email:           user.GetEmail(),
+		Bio:             user.GetBio(),
+		Location:        user.GetLocation(),
+		Followers:       followerLinks,
+		Following:       followingLinks,
+		PublicRepos:     user.GetPublicRepos(),
+		Organizations:   orgNames,
+		RecentActivity:  eventDetails,
+		MostUsedLang:    mostUsedLanguage,
+		MostPopularRepo: mostPopularRepo,
 	}
 
 	c.JSON(http.StatusOK, userDetails)
@@ -237,24 +248,35 @@ func (srv *Server) handleUsers(c *gin.Context) {
 	for i, repo := range repos {
 		repoLinks[i] = models.RepoLink{
 			RepoName: repo.GetName(),
-			Link:     fmt.Sprintf("http://localhost:8080/user-repos/%s", repo.GetName()),
+			Link:     fmt.Sprintf("http://localhost:8080/repos/%s/%s", username, repo.GetName()),
 		}
 	}
 
 	followerLinks := store.UserToLinkModel(followers)
 	followingLinks := store.UserToLinkModel(following)
 
+	repo, err := store.GetMostPopularRepo(ctx, client, username)
+	if err != nil {
+		zap.S().Errorf("Error while getting the most popular repo : %v", err)
+	}
+
+	mostPopularRepo := models.RepoLink{
+		RepoName: repo.GetName(),
+		Link:     fmt.Sprintf("http://localhost:8080/user-repos/%s", repo.GetName()),
+	}
+
 	userDetails := models.UserDetails{
-		Username:    user.GetLogin(),
-		AvatarURL:   user.GetAvatarURL(),
-		Name:        user.GetName(),
-		Email:       user.GetEmail(),
-		Bio:         user.GetBio(),
-		Location:    user.GetLocation(),
-		Followers:   followerLinks,
-		Following:   followingLinks,
-		PublicRepos: user.GetPublicRepos(),
-		RepoLinks:   repoLinks,
+		Username:        user.GetLogin(),
+		AvatarURL:       user.GetAvatarURL(),
+		Name:            user.GetName(),
+		Email:           user.GetEmail(),
+		Bio:             user.GetBio(),
+		Location:        user.GetLocation(),
+		Followers:       followerLinks,
+		Following:       followingLinks,
+		PublicRepos:     user.GetPublicRepos(),
+		RepoLinks:       repoLinks,
+		MostPopularRepo: mostPopularRepo,
 	}
 
 	c.JSON(http.StatusOK, userDetails)
@@ -300,14 +322,19 @@ func (srv *Server) handleGetRepository(c *gin.Context) {
 		return
 	}
 
+	var lang string
+	if repo.Language != nil {
+		lang = *repo.Language
+	}
+
 	response := models.Repo{
-		Name:          repo.GetName(),
-		Desc:          repo.GetDescription(),
-		Lang:          *repo.Language,
-		Clone:         *repo.CloneURL,
-		ForkCount:     *repo.ForksCount,
-		WatchersCount: *repo.StargazersCount,
-		CreatedAt:     *repo.CreatedAt,
+		Name:         repo.GetName(),
+		Desc:         repo.GetDescription(),
+		Lang:         lang,
+		Clone:        *repo.CloneURL,
+		ForkCount:    *repo.ForksCount,
+		StarredCount: *repo.StargazersCount,
+		CreatedAt:    *repo.CreatedAt,
 	}
 
 	c.JSON(http.StatusOK, response)
@@ -379,7 +406,7 @@ func (srv *Server) handleGetPrivateRepo(c *gin.Context) {
 		Collaborators: collaboratorLinks,
 		Contributors:  contributorLinks,
 		ForkCount:     *repo.ForksCount,
-		WatchersCount: *repo.StargazersCount,
+		StarredCount:  *repo.StargazersCount,
 		Commits:       commitDetails,
 	}
 

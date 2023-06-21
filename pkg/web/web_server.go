@@ -20,7 +20,7 @@ func CreateWebServer(store *store.MongoStore) *Server {
 	srv.r.GET(kRepos, setAuthHeaderMiddleware(), authMiddleware(), srv.handleUserRepos)
 	srv.r.GET(kIndividualRepos, srv.handleGetRepository)
 	srv.r.GET(kPrivateReposList, setAuthHeaderMiddleware(), authMiddleware(), srv.handleListPrivateRepos)
-	srv.r.GET(kIndividualPrivateRepos, setAuthHeaderMiddleware(), authMiddleware(), srv.handleGetPrivateRepo)
+	srv.r.GET(kUserRepos, setAuthHeaderMiddleware(), authMiddleware(), srv.handleGetPrivateRepo)
 
 	if err := srv.r.Run("localhost:8080"); err != nil {
 		zap.S().Errorf("Error while running the server !")

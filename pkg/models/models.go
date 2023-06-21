@@ -6,32 +6,34 @@ import (
 )
 
 type UserDetails struct {
-	Username    string     `json:"username"`
-	AvatarURL   string     `json:"avatar_url"`
-	Name        string     `json:"name"`
-	Email       string     `json:"email"`
-	Bio         string     `json:"bio"`
-	Location    string     `json:"location"`
-	Followers   []UserLink `json:"followers"`
-	Following   []UserLink `json:"following"`
-	PublicRepos int        `json:"public_repos"`
-	RepoLinks   []RepoLink `json:"repo_links"`
+	Username        string     `json:"username"`
+	AvatarURL       string     `json:"avatar_url"`
+	Name            string     `json:"name"`
+	Email           string     `json:"email"`
+	Bio             string     `json:"bio"`
+	Location        string     `json:"location"`
+	Followers       []UserLink `json:"followers"`
+	Following       []UserLink `json:"following"`
+	PublicRepos     int        `json:"public_repos"`
+	RepoLinks       []RepoLink `json:"repo_links"`
+	MostPopularRepo RepoLink   `json:"most_popular_repo"`
 }
 
 type AuthorizedUserDetails struct {
-	Username       string     `json:"username"`
-	AvatarURL      string     `json:"avatar_url"`
-	Name           string     `json:"name"`
-	Email          string     `json:"email"`
-	Bio            string     `json:"bio"`
-	Location       string     `json:"location"`
-	Followers      []UserLink `json:"followers"`
-	Following      []UserLink `json:"following"`
-	PublicRepos    int        `json:"public_repos"`
-	RepoLinks      []RepoLink `json:"repo_links"`
-	Organizations  []string   `json:"organizations"`
-	RecentActivity []Event    `json:"recent_activity"`
-	MostUsedLang   string     `json:"most_used_lang"`
+	Username        string     `json:"username"`
+	AvatarURL       string     `json:"avatar_url"`
+	Name            string     `json:"name"`
+	Email           string     `json:"email"`
+	Bio             string     `json:"bio"`
+	Location        string     `json:"location"`
+	Followers       []UserLink `json:"followers"`
+	Following       []UserLink `json:"following"`
+	PublicRepos     int        `json:"public_repos"`
+	RepoLinks       []RepoLink `json:"repo_links"`
+	Organizations   []string   `json:"organizations"`
+	RecentActivity  []Event    `json:"recent_activity"`
+	MostUsedLang    string     `json:"most_used_lang"`
+	MostPopularRepo RepoLink   `json:"most_popular_repo"`
 }
 
 type UserLink struct {
@@ -59,18 +61,18 @@ type AuthorizedRepo struct {
 	Collaborators []UserLink       `json:"collaborators"`
 	Contributors  []UserLink       `json:"contributors"`
 	ForkCount     int              `json:"fork_count"`
-	WatchersCount int              `json:"watchers_count"`
+	StarredCount  int              `json:"starred_count"`
 	Commits       []Commit         `json:"commits"`
 }
 
 type Repo struct {
-	Name          string           `json:"name"`
-	Desc          string           `json:"desc"`
-	Lang          string           `json:"lang"`
-	Clone         string           `json:"clone"`
-	CreatedAt     github.Timestamp `json:"created_at"`
-	ForkCount     int              `json:"fork_count"`
-	WatchersCount int              `json:"watchers_count"`
+	Name         string           `json:"name"`
+	Desc         string           `json:"desc"`
+	Lang         string           `json:"lang"`
+	Clone        string           `json:"clone"`
+	CreatedAt    github.Timestamp `json:"created_at"`
+	ForkCount    int              `json:"fork_count"`
+	StarredCount int              `json:"starred_count"`
 }
 
 type Commit struct {

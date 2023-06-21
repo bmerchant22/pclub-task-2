@@ -1,5 +1,5 @@
 # PClub recruitment Task-2
-This is a website created with golang, using gin-gorm for routing purposes and mongoDB for storing github tokens. Also, JWT tokens are used for authentication purposes. A good UI interface could not be implemented, so one needs to hit the routes manually on a browser. It is suggested to use Mozilla Firefox or postman for prettier JSON response. 
+This is a website created with golang, using gin-gorm for routing purposes and mongoDB for storing github tokens. Also, JWT tokens are used for authentication purposes. A good UI interface could not be implemented, so you need to hit the routes manually on a browser. It is suggested to use Mozilla Firefox or postman for prettier JSON response. 
 
 ## Getting Started
 
@@ -33,11 +33,11 @@ These instructions will guide you on how to set up and run the project on your l
    
 ## Routes
 
-### Unauthorized routes
+### Unprotected routes
 Routes that can be accessed by a user even if he is not authenticated and logged in
 
 1. **"/"**: This is the home route
-2. **"/users/:username"**: On this route, you can view general details about any github user i.e. username, followers, following, public repos etc.
+2. **"/users/:username"**: On this route, you can view general details about any github user i.e. username, followers, following, public repos etc. You can also view the most popular repo of the user.
 3. **"/repos/:username/:repo"**: On this route, you can view any public repo of any user, containing name, desc, createdAt, language and such details.
 
 ### Authorization routes

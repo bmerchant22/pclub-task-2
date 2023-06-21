@@ -182,3 +182,22 @@ func CalculateMostUsedLanguage(ctx context.Context, client *github.Client, usern
 
 	return mostUsedLanguage, nil
 }
+
+func GetMostPopularRepo(ctx context.Context, client *github.Client, username string) (*github.Repository, error) {
+	repos, _, err := client.Repositories.List(ctx, username, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var mostPopularRepo *github.Repository
+	maxStars := 0
+
+	for _, repo := range repos {
+		if repo.StargazersCount != nil && *repo.StargazersCount > maxStars {
+			maxStars = *repo.StargazersCount
+			mostPopularRepo = repo
+		}
+	}
+
+	return mostPopularRepo, nil
+}

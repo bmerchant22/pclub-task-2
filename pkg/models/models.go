@@ -6,6 +6,19 @@ import (
 )
 
 type UserDetails struct {
+	Username    string     `json:"username"`
+	AvatarURL   string     `json:"avatar_url"`
+	Name        string     `json:"name"`
+	Email       string     `json:"email"`
+	Bio         string     `json:"bio"`
+	Location    string     `json:"location"`
+	Followers   []UserLink `json:"followers"`
+	Following   []UserLink `json:"following"`
+	PublicRepos int        `json:"public_repos"`
+	RepoLinks   []RepoLink `json:"repo_links"`
+}
+
+type AuthorizedUserDetails struct {
 	Username       string     `json:"username"`
 	AvatarURL      string     `json:"avatar_url"`
 	Name           string     `json:"name"`
@@ -15,6 +28,7 @@ type UserDetails struct {
 	Followers      []UserLink `json:"followers"`
 	Following      []UserLink `json:"following"`
 	PublicRepos    int        `json:"public_repos"`
+	RepoLinks      []RepoLink `json:"repo_links"`
 	Organizations  []string   `json:"organizations"`
 	RecentActivity []Event    `json:"recent_activity"`
 	MostUsedLang   string     `json:"most_used_lang"`
@@ -36,7 +50,7 @@ type Event struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-type Repo struct {
+type AuthorizedRepo struct {
 	Name          string           `json:"name"`
 	Desc          string           `json:"desc"`
 	Lang          string           `json:"lang"`
@@ -47,6 +61,16 @@ type Repo struct {
 	ForkCount     int              `json:"fork_count"`
 	WatchersCount int              `json:"watchers_count"`
 	Commits       []Commit         `json:"commits"`
+}
+
+type Repo struct {
+	Name          string           `json:"name"`
+	Desc          string           `json:"desc"`
+	Lang          string           `json:"lang"`
+	Clone         string           `json:"clone"`
+	CreatedAt     github.Timestamp `json:"created_at"`
+	ForkCount     int              `json:"fork_count"`
+	WatchersCount int              `json:"watchers_count"`
 }
 
 type Commit struct {

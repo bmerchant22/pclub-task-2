@@ -1,5 +1,5 @@
 # PClub recruitment Task-2
-This is a website created with golang, using gin-gorm for routing purposes and mongoDB for storing github tokens
+This is a website created with golang, using gin-gorm for routing purposes and mongoDB for storing github tokens. Also, JWT tokens are used for authentication purposes. A good UI interface could not be implemented, so one needs to hit the routes manually on a browser. It is suggested to use Mozilla Firefox or postman for prettier JSON response. 
 
 ## Getting Started
 
@@ -50,6 +50,8 @@ These are the route which you can access only if you are verified by github and 
 1. **"/user":** On this route, details of the logged in user is shown. This includes the normal user details plus the recent activity and most used language of the user.
 2. **"/repos":** On this route, all public and private repos are listed with their names and links to their individual details.
 3. **"/private-repos":** On this route, all private repos of the user are listed
-4. **"/user-repos/:repo":** On this route, individual repos of the logged in user can be seen. In addition, list of collaborators and contributors with their individual detail routes can also be seen. Also, the commits can be viewed.
+4. **"/user-repos/:repo":** On this route, individual repos of the logged-in user can be seen. In addition, list of collaborators and contributors with their individual detail routes can also be seen. Also, the commits can be viewed.
 
-
+If any error occurs while cloning and running the code, you can contact me at: \
+Discord: victorX#7731 \
+Mail: bmerchant22@iitk.ac.in

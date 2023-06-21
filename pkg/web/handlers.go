@@ -186,7 +186,7 @@ func (srv *Server) handleGetUserDetails(c *gin.Context) {
 		zap.S().Errorf("Error while calculating most used language : %v", err)
 	}
 
-	userDetails := models.UserDetails{
+	userDetails := models.AuthorizedUserDetails{
 		Username:       user.GetLogin(),
 		AvatarURL:      user.GetAvatarURL(),
 		Name:           user.GetName(),
@@ -228,6 +228,19 @@ func (srv *Server) handleUsers(c *gin.Context) {
 		return
 	}
 
+	repos, _, err := client.Repositories.List(context.Background(), username, nil)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while fetching private repos from github"})
+	}
+
+	repoLinks := make([]models.RepoLink, len(repos))
+	for i, repo := range repos {
+		repoLinks[i] = models.RepoLink{
+			RepoName: repo.GetName(),
+			Link:     fmt.Sprintf("http://localhost:8080/user-repos/%s", repo.GetName()),
+		}
+	}
+
 	followerLinks := store.UserToLinkModel(followers)
 	followingLinks := store.UserToLinkModel(following)
 
@@ -241,6 +254,7 @@ func (srv *Server) handleUsers(c *gin.Context) {
 		Followers:   followerLinks,
 		Following:   followingLinks,
 		PublicRepos: user.GetPublicRepos(),
+		RepoLinks:   repoLinks,
 	}
 
 	c.JSON(http.StatusOK, userDetails)
@@ -356,7 +370,7 @@ func (srv *Server) handleGetPrivateRepo(c *gin.Context) {
 		}
 	}
 
-	response := models.Repo{
+	response := models.AuthorizedRepo{
 		Name:          repo.GetName(),
 		Desc:          repo.GetDescription(),
 		Lang:          lang,
